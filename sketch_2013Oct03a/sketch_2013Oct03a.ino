@@ -1,5 +1,4 @@
 #include <Wire.h>
-
 #include <LiquidCrystal.h>
 
 #define BTN 2
@@ -14,8 +13,6 @@
 //  2,3,4,5,
 LiquidCrystal lcd(12,11,10, 6,7,8,9);
 unsigned int cnt = 0;
-int val = 0;
-int old_val = 0;
 
 int btnVal()
 {
@@ -24,6 +21,8 @@ int btnVal()
 
 int btnState()
 {
+  static int val;
+  static int old_val;
   int btn_status;
   val = btnVal();
   btn_status = old_val * 10 + val;
@@ -34,10 +33,10 @@ int btnState()
 
 void printHello()
 {
-  //lcd.clear();
-//  for(int i=0; i < 0x40; i++)
-//    lcd.print(' ');
-//  lcd.setCursor(0,0);
+  //  lcd.clear();
+  //  for(int i=0; i < 0x40; i++)
+  //    lcd.print(' ');
+  //  lcd.setCursor(0,0);
  if(0){
   lcd.print("Hello");
   lcd.setCursor(0,1); // crlf
@@ -53,7 +52,7 @@ void print7SegLED(unsigned int value)
   dat[0] = value/256;
   dat[1] = value%256;
   Wire.beginTransmission(I2CADDRESS);
-  Wire.send(dat,3);
+  Wire.write(dat,3);
   Wire.endTransmission();
 }
 
@@ -64,7 +63,6 @@ void setup()
   pinMode(BTN,INPUT);
   Wire.begin(I2CADDRESS);
   print7SegLED(cnt);
-//  cnt=0;
   lcd.begin(8,2);
   printHello();
 }
@@ -72,23 +70,26 @@ void setup()
 void loop()
 {
   switch(btnState()){
-    case TURNOFF:
+    case OFF:
       cnt += 1;
       print7SegLED(cnt);
       if(cnt%14)
         lcd.scrollDisplayLeft();
       else
         lcd.home();
-//    case OFF:
+      break;
+
+//    case TURNOFF:
       //lcd.clear();
       //lcd.print(cnt);
-      break;
       
     case TURNON:
 //      lcd.print(cnt);
       //printHello();
+      lcd.clear();
+      cnt = 0;
       break;
   }
-  delay(10);
+  delay(1000);
 }
 
