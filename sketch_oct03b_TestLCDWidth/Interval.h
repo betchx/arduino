@@ -9,12 +9,14 @@ class Interval
   static const int size_ ;//= sizeof(intervals_in_sec) / sizeof(int);
   static const int ubound;// = size_ - 1;
   int index;
+  int constant;
 
 public:
   // construct
-  Interval()
+  Interval(int index_ = 0, int constant_ = 0 )
   {
-    index = 0;
+    index = index_;
+    constant = constant_;
   }
   
   // 間隔を表す文字列を返す
@@ -34,15 +36,19 @@ public:
   // 増やす
   void increase()
   {
-    index = (index + 1)  % size_;
+    if(constant == 0){
+      index = (index + 1)  % size_;
+    }
   }
   // 減らす
   void decrease()
   {
-    if(index > 0){
-      --index;
-    }else{
-      index = size_ - 1;
+    if(constant ==0){
+      if(index > 0){
+        --index;
+      }else{
+        index = size_ - 1;
+      }
     }
   }
   

@@ -83,7 +83,11 @@ CountDownTimer* timer;
 
 void setup()
 {
-  interval = new Interval();
+  //                                                0        1        2      3        4       5       6        7
+  // const char* Interval::interval_strings[] = { "20sec", "1min", "5min", "10min", "30min", "1hr",   "2hr",   "3hr" };
+  const int interval_index = 5; // 1 hr
+  const int no_change = -1; // 0: off others: on
+  interval = new Interval(interval_index, no_change );
   timer = new CountDownTimer(interval->sec());
   lcd.begin(LCD_Width, LCD_Height);
   lcd.createChar(LCDC_delta, LCDC_delta_data);
